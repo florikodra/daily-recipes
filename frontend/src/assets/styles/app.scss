@@ -1,0 +1,17 @@
+$mainColor : #242325;
+
+.topBarMenu, footer{
+    background-color: $mainColor!important;
+}
+
+html, body{
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-image: url(../images/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}

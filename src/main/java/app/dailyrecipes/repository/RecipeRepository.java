@@ -8,5 +8,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>{
 
     List<Recipe> findByPublished(boolean published);
 
+    List<Recipe> findByPublishedAndNameContaining(boolean published, String search);
+
     List<Recipe> findByNameContaining(String name);
 }

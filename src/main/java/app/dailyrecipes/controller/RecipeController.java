@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.dailyrecipes.model.Recipe;
 import app.dailyrecipes.repository.RecipeRepository;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/recipe")
 public class RecipeController {
@@ -36,9 +37,10 @@ public class RecipeController {
 	}
 
     @GetMapping("/published")
-	public ResponseEntity<List<Recipe>> findByPublished() {
+	public ResponseEntity<List<Recipe>> findByPublished(@RequestParam("search") String search) {
 		try {
-			List<Recipe> recipes = recipeRepository.findByPublished(true);
+            
+			List<Recipe> recipes = recipeRepository.findByPublishedAndNameContaining(true, search);
 
 			if (recipes.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -70,7 +72,7 @@ public class RecipeController {
                 recipe.getDescription(),
                 recipe.getServings(),
                 recipe.getIngredients(),
-                recipe.isPublished()
+                true
             );
             
             Recipe createdRecipe = recipeRepository.save(_recipe);
@@ -78,6 +80,16 @@ public class RecipeController {
 			return new ResponseEntity<>(createdRecipe, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+    @DeleteMapping("/{id}")
+	public ResponseEntity<HttpStatus> deleteRecipe(@PathVariable("id") long id) {
+		try {
+			recipeRepository.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

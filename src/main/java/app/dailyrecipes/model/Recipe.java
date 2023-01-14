@@ -106,4 +106,17 @@ public class Recipe {
 		this.published = isPublished;
 	}
 
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.getRecipes().add(this);
+    }
+
+    public void removeTag(long categoryId) {
+        Category category = this.categories.stream().filter(t -> t.getId() == categoryId).findFirst().orElse(null);
+        if (category != null) {
+          this.categories.remove(category);
+          category.getRecipes().remove(this);
+        }
+      }
+
 }
